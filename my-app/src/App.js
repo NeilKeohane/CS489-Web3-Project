@@ -58,6 +58,11 @@ function Login({ onLogin, onConnect }) {
     onLogin();
   }
 
+
+
+  
+
+  
   return (
     
       <form className="login-form" onSubmit={handleSubmit}>
@@ -281,6 +286,7 @@ function App() {
             onLogout={handleLogout}
           />
           <GoalForm />
+          <WorkoutInformation />
         </div>
       ) : (
         <Login onLogin={handleLogin} onConnect={handleConnect} />
