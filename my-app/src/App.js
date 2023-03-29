@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
 
   function handleEmailChange(event) {
     setEmail(event.target.value);
@@ -18,6 +20,11 @@ function Login({ onLogin }) {
     onLogin();
   }
 
+
+
+  
+
+  
   return (
     <form className="login-form" onSubmit={handleSubmit}>
       <h2>Login</h2>
@@ -76,6 +83,64 @@ function GoalForm() {
   );
 }
 
+function WorkoutInformation() {
+  const [hours, setHours] = useState(0);
+  const [minutes, setMinutes] = useState(0);
+  const [seconds, setSeconds] = useState(0);
+
+  function handleHoursChange(event) {
+    setHours(event.target.value);
+  }
+
+  function handleMinutesChange(event) {
+    setMinutes(event.target.value);
+  }
+
+  function handleSecondsChange(event) {
+    setSeconds(event.target.value);
+  }
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    // handle submission logic here
+  }
+
+  return (
+    <div className="workout-information">
+      <h2>Enter workout information</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="hours-box">
+          <label>
+            Hours:
+            <input type="number" value={hours} onChange={handleHoursChange} />
+          </label>
+        </div>
+        <div className="minutes-box">
+          <label>
+            Minutes:
+            <input type="number" value={minutes} onChange={handleMinutesChange} />
+          </label>
+        </div>
+        <div className="seconds-box">
+          <label>
+            Seconds:
+            <input type="number" value={seconds} onChange={handleSecondsChange} />
+          </label>
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -94,6 +159,7 @@ function App() {
           <button className="logout-button" onClick={handleLogout}>Logout</button>
           <Dashboard />
           <GoalForm />
+          <WorkoutInformation />
         </div>
       ) : (
         <Login onLogin={handleLogin} />
