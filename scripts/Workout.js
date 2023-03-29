@@ -16,13 +16,14 @@ const main = async () => {
   // await allMyRuns.wait();
 
   let myRun2 = await workoutContract.connect(user).logExercise(3, 55, 0, 35, 21);
-  await myRun.wait();
+  await myRun2.wait();
 
   let allMyRuns2 = await workoutContract.connect(user).getMyRuns();
 
-  /*
-  figure out time representation... 
-  */
+  let myRun3 = await workoutContract.connect(user).logExercise(4, 70, 0, 22, 27);
+  await myRun3.wait();
+
+  let allMyRuns3 = await workoutContract.connect(user).getMyRuns();
 
 };
 
