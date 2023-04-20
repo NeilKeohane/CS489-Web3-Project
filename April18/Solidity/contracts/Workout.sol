@@ -29,18 +29,10 @@ contract Workout
         bool exists;
     }
 
-    struct Reward
-    {
-        bool mile1;
-        bool mile25;
-        bool mile75;
-        bool mile150;
-        bool mile250;
-        bool mile500;
-        bool mile750;
-        bool mile1000;
-        bool exists;
-    }
+struct Reward {
+  bool[] milestones;
+  bool exists;
+}
 
     mapping (address => User) public database;
     mapping (address => Exercise[]) public log;
@@ -60,7 +52,7 @@ contract Workout
         if(!database[msg.sender].exists)
         {
             database[msg.sender] = User(msg.sender, 0, 0, 0, 0, 0, 0, 0, 0, true);
-            rewards[msg.sender] = Reward(false, false, false, false, false, false, false, false, true);
+            rewards[msg.sender] = rewards[msg.sender] = Reward({milestones: new bool[](8),exists: true});
         }
 
         // require statements 
@@ -136,49 +128,26 @@ contract Workout
         }
     }
 
-    function updateRewards(address person) public
-    {
-        if(database[person].longestRunMiles > 1 && rewards[person].mile1 == false)
-        {
-            rewards[person].mile1 = true;
-            console.log("New milestone reached! You've run your first mile!");
-        }
-        if(database[person].longestRunMiles > 25 && rewards[person].mile25 == false)
-        {
-            rewards[person].mile25 = true;
-            console.log("New milestone reached! You've run your 25th mile!");
-        }
-        if(database[person].longestRunMiles > 75 && rewards[person].mile75 == false)
-        {
-            rewards[person].mile75 = true;
-            console.log("New milestone reached! You've run your 75th mile!");
-        }
-        if(database[person].longestRunMiles > 150 && rewards[person].mile150 == false)
-        {
-            rewards[person].mile150 = true;
-            console.log("New milestone reached! You've run your 150th mile!");
-        }
-        if(database[person].longestRunMiles > 250 && rewards[person].mile250 == false)
-        {
-            rewards[person].mile250 = true;
-            console.log("New milestone reached! You've run your 250th mile!");
-        }
-        if(database[person].longestRunMiles > 500 && rewards[person].mile500 == false)
-        {
-            rewards[person].mile500 = true;
-            console.log("New milestone reached! You've run your 500th mile!");
-        }
-        if(database[person].longestRunMiles > 750 && rewards[person].mile750 == false)
-        {
-            rewards[person].mile750 = true;
-            console.log("New milestone reached! You've run your 750th mile!");
-        }
-        if(database[person].longestRunMiles > 1000 && rewards[person].mile1000 == false)
-        {
-            rewards[person].mile1000 = true;
-            console.log("New milestone reached! You've run your 1000th mile!");
-        }
+function updateRewards(address person) public {
+  Reward storage reward = rewards[person];
+  uint256 longestRunMiles = database[person].longestRunMiles;
+
+  if (!reward.exists) {
+    reward.milestones = new bool[](8);
+    reward.exists = true;
+  }
+
+  uint16[8] memory milestones = [1, 25, 75, 150, 250, 500, 750, 1000];
+
+  for (uint i = 0; i < milestones.length; i++) {
+    uint16 milestone = milestones[i];
+
+    if (longestRunMiles > milestone && !reward.milestones[i]) {
+      reward.milestones[i] = true;
+      console.log("Congrats! you reached your", milestones[i], "mile milestone!");
     }
+  }
+}
 
     function getMyRuns() public view returns(uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256)
     {
