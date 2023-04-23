@@ -14,6 +14,56 @@ const contractAddress = "0x4171A1De0dbd7A19CA83048e32B6C1de11590c62";
 const providerUrl = "http://localhost:8545";
 
 
+
+const Milestones = () => {
+  const [milestones, setMilestones] = useState([
+    { id: 1, name: "Milestone 1", completed: false },
+    { id: 25, name: "Milestone 2", completed: false },
+    { id: 75, name: "Milestone 3", completed: false },
+    { id: 150, name: "Milestone 4", completed: false },
+    { id: 250, name: "Milestone 5", completed: false },
+    { id: 500, name: "Milestone 6", completed: false },
+    { id: 750, name: "Milestone 7", completed: false },
+    { id: 1000, name: "Milestone 8", completed: false },
+  ]);
+
+  // Update the milestones when the component mounts
+  useEffect(() => {
+    // Here you can connect to your Solidity contract to retrieve the user's completed milestones
+    // and update the 'completed' property of each milestone accordingly
+    // For now, let's assume milestones 1, 3, 5, and 7 have been completed
+    setMilestones((prevMilestones) => {
+      return prevMilestones.map((milestone) => {
+        if ([1].includes(milestone.id)) {
+          return { ...milestone, completed: true };
+        }
+        return milestone;
+      });
+    });
+  }, []);
+
+  return (
+    <div className="milestones-box">
+      <h2>Milestones Completed</h2>
+      <div>
+        {milestones.map((milestone) => (
+          <div
+            key={milestone.id}
+            className={`Milestones-box ${milestone.completed ? "completed" : ""}`}
+          >
+            {milestone.completed ? <span>&#10003;</span> : milestone.id}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+
+
+
+
+
 // Function to create new account (not used)
 async function handleCreateNewAccount(event) {
   const [newAccountId, setNewAccountId] = useState("");
@@ -108,6 +158,7 @@ function Dashboard({ walletAddress, onLogout }) {
       <p>Welcome, {walletAddress}</p>
       <p>Total Time Spent Running: {timeRan}</p>
       <p>Total Miles Run: {milesRun}</p>
+      <p>Total RUN Balance: </p>
       <button className="logout-button" onClick={onLogout}>Logout</button>
     </div>
   );
@@ -134,16 +185,11 @@ function GoalForm() {
 
   return (
     <form className="goal-form" onSubmit={handleSubmit}>
-      <h2>Set Goal and Record Progress</h2>
-      <label>
-        Goal:
-        <input type="text" value={goal} onChange={handleGoalChange} />
-      </label>
-      <label>
-        Progress:
-        <input type="number" value={progress} onChange={handleProgressChange} />
-      </label>
-      <button type="submit">Submit</button>
+      <h2>Record Progress</h2>
+      
+
+
+      
       <WorkoutInformation />
     </form>
   );
@@ -196,6 +242,9 @@ function LoginWallet({ onConnect}) {
   );
 }
 
+
+
+
 // Workout Information Component
 function WorkoutInformation() {
   const [hours, setHours] = useState(0);
@@ -222,7 +271,7 @@ function WorkoutInformation() {
   return (
     <div className="workout-information">
       
-      <h2><br></br>Enter Workout Information</h2>
+      <h2><br></br>Enter Run Information</h2>
       <form onSubmit={handleSubmit}>
         <div className="hours-box">
           <label>
@@ -285,7 +334,15 @@ function App() {
             walletAddress={walletAddress}
             onLogout={handleLogout}
           />
-          <GoalForm />
+          <div class="container">
+            <div class="dashboard-box">
+              <GoalForm />
+            </div>
+            <div class="dashboard-box">
+              <Milestones />
+            </div>
+          </div>
+
         </div>
       ) : (
         <Login onLogin={handleLogin} onConnect={handleConnect} />

@@ -198,4 +198,46 @@ body {
     display: flex;
     justify-content: center;
   }
+
+
+  .milestones {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .milestones-box {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  
+  .milestones-box h2 {
+    margin-top: 0;
+  }
+  
+  .milestones-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .milestones-box li {
+    margin-bottom: 10px;
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .dashbaord-box {
+    width: 48%;
+    display: inline-block;
+    vertical-align: top;
+    /* Add other styles as necessary */
+  }
+  
   

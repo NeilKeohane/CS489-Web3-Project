@@ -3,6 +3,7 @@
 pragma solidity ^0.8.4;
 
 import "hardhat/console.sol";
+import "../../../contracts/MilestonesCoin.sol";
 
 contract Workout 
 {
@@ -37,9 +38,11 @@ struct Reward {
     mapping (address => User) public database;
     mapping (address => Exercise[]) public log;
     mapping (address => Reward) public rewards;
+    MilestonesCoin public coin;
 
-    constructor()
+    constructor(MilestonesCoin _coin)
     {
+        coin = _coin;
         console.log("\nWelcome to Milestones.");
     }
 
@@ -86,7 +89,7 @@ struct Reward {
 
     }
     
-    function rollovers(address person, uint256 distanceRanMiles, uint256 distanceRanFract) public
+    function rollovers(address person, uint256 distanceRanMiles, uint256 distanceRanFract) internal
     {
         /*
         Rollover time conversions
@@ -128,9 +131,9 @@ struct Reward {
         }
     }
 
-function updateRewards(address person) public {
+function updateRewards(address person) internal {
   Reward storage reward = rewards[person];
-  uint256 longestRunMiles = database[person].longestRunMiles;
+  uint256 totalMiles = database[person].totalMiles;
 
   if (!reward.exists) {
     reward.milestones = new bool[](8);
@@ -142,8 +145,9 @@ function updateRewards(address person) public {
   for (uint i = 0; i < milestones.length; i++) {
     uint16 milestone = milestones[i];
 
-    if (longestRunMiles > milestone && !reward.milestones[i]) {
+    if (totalMiles > milestone && !reward.milestones[i]) {
       reward.milestones[i] = true;
+      coin.transfer(person, milestones[i]);
       console.log("Congrats! you reached your", milestones[i], "mile milestone!");
     }
   }

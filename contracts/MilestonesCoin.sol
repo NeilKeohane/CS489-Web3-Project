@@ -11,10 +11,10 @@ contract MilestonesCoin {
     mapping (address => uint256) public balanceOf;
 
     constructor() {
-        balanceOf[msg.sender] = totalSupply;
+        //balanceOf[msg.sender] = totalSupply;
     }
 
-    function transfer(address _to, uint256 _value) public returns (bool success) {
+    function transfer(address _to, uint256 _value) external returns (bool success) {
         require(balanceOf[msg.sender] >= _value, "Insufficient balance");
         balanceOf[msg.sender] -= _value;
         balanceOf[_to] += _value;
