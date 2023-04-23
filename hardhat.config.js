@@ -13,7 +13,7 @@ module.exports = {
       chainId: 1337
     },
     goerli: {
-      url: "https://eth-mainnet.g.alchemy.com/v2/SS0cHVgewZxkTbqeptcBizJ07YUMdYFf",
+      url: "https://eth-goerli.g.alchemy.com/v2/EetNVhdGjWQ5svv4-6hYSzWeXWyuAwEQ",
       accounts: ["a4265a4b23766be526b6b9bd89645a418e1f6e6499309fe0f6aa37838d5cacbd"]
     }
   }

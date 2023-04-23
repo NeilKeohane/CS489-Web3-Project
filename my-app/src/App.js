@@ -286,7 +286,6 @@ function App() {
             onLogout={handleLogout}
           />
           <GoalForm />
-          <WorkoutInformation />
         </div>
       ) : (
         <Login onLogin={handleLogin} onConnect={handleConnect} />
