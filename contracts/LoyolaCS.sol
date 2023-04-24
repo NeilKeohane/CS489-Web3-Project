@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: UNLICENSED
 import "hardhat/console.sol";
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.19;
 
 contract LoyolaCS {
         struct User
