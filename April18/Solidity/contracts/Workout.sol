@@ -10,23 +10,23 @@ contract Workout
     struct User
     {
         address id;
-        uint256 totalMiles;
-        uint256 totalMilesFract;
-        uint256 totalHours;  
-        uint256 totalMinutes;
-        uint256 totalSeconds;
-        uint256 longestRunMiles;
-        uint256 longestRunFract;
-        uint256 numberRuns;
+        uint16 totalMiles;
+        uint16 totalMilesFract;
+        uint16 totalHours;  
+        uint16 totalMinutes;
+        uint16 totalSeconds;
+        uint16 longestRunMiles;
+        uint16 longestRunFract;
+        uint16 numberRuns;
         bool exists;
     }
 
     struct Exercise 
     {
-        uint256 miles;
-        uint256 timeH;
-        uint256 timeM;
-        uint256 timeS;
+        uint8 miles;
+        uint8 timeH;
+        uint8 timeM;
+        uint8 timeS;
         bool exists;
     }
 
@@ -49,7 +49,7 @@ struct Reward {
     /*
     How much can a function handle...?
     */
-    function logExercise(uint256 distanceRanMiles, uint256 distanceRanFract, uint256 hrs, uint256 mins, uint256 secs) public
+    function logExercise(uint8 distanceRanMiles,uint8 distanceRanFract, uint8 hrs, uint8 mins, uint8 secs) public
     {
         // create a new user
         if(!database[msg.sender].exists)
@@ -89,7 +89,7 @@ struct Reward {
 
     }
     
-    function rollovers(address person, uint256 distanceRanMiles, uint256 distanceRanFract) internal
+    function rollovers(address person, uint16 distanceRanMiles, uint16 distanceRanFract) internal
     {
         /*
         Rollover time conversions
@@ -153,7 +153,7 @@ function updateRewards(address person) internal {
   }
 }
 
-    function getMyRuns() public view returns(uint256, uint256, uint256, uint256, uint256, uint256, uint256, uint256)
+    function getMyRuns() public view returns(uint16, uint16, uint16, uint16, uint16, uint16, uint16, uint16)
     {
         address p = msg.sender;
         // require(database[msg.sender].exists, "This user does not exist.");
