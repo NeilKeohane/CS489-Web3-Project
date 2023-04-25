@@ -21,4 +21,7 @@ contract MilestonesCoin {
         return true;
     }
 
+    function getBalance(address _userAddress) public view returns (uint256) {
+        return balanceOf[_userAddress];
+    }
 }

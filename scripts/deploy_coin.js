@@ -1,9 +1,9 @@
 const main = async () => {
-    const testFactory = await hre.ethers.getContractFactory("MilestonesCoin");
-    const test = await testFactory.deploy();
-    await test.deployed();
-    console.log("Contract deployed to:", test.address);
-    const abi = test.interface.abi;
+    const coinFactory = await hre.ethers.getContractFactory("MilestonesCoin");
+    const coin = await coinFactory.deploy();
+    await coin.deployed();
+    console.log("MilestonesCoin contract deployed to:", coin.address);
+    const abi = coin.interface.abi;
     console.log(abi)
   };
   

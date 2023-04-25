@@ -8,10 +8,307 @@ import logo from './running-man-silhouette-19.webp';
 import logo2 from './finish-line.webp'
 
 // Smart Contract Information
-//import abi from "../artifacts/contracts/Workout.sol/Workout.json"
-//const contractABI = abi.abi;
-const contractAddress = "0x4171A1De0dbd7A19CA83048e32B6C1de11590c62";
-const providerUrl = "http://localhost:8545";
+
+const contractABI = [
+  {
+    "inputs": [
+      {
+        "internalType": "contract MilestonesCoin",
+        "name": "_coin",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "coin",
+    "outputs": [
+      {
+        "internalType": "contract MilestonesCoin",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "database",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "id",
+        "type": "address"
+      },
+      {
+        "internalType": "uint16",
+        "name": "totalMiles",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "totalMilesFract",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "totalHours",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "totalMinutes",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "totalSeconds",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "longestRunMiles",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "longestRunFract",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "numberRuns",
+        "type": "uint16"
+      },
+      {
+        "internalType": "bool",
+        "name": "exists",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getBalance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMilesRun",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getMyRuns",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getRewards",
+    "outputs": [
+      {
+        "internalType": "uint16[]",
+        "name": "",
+        "type": "uint16[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getTotalTimeSpent",
+    "outputs": [
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      },
+      {
+        "internalType": "uint16",
+        "name": "",
+        "type": "uint16"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "log",
+    "outputs": [
+      {
+        "internalType": "uint8",
+        "name": "miles",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "timeH",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "timeM",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "timeS",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bool",
+        "name": "exists",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint8",
+        "name": "distanceRanMiles",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "distanceRanFract",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "hrs",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "mins",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "secs",
+        "type": "uint8"
+      }
+    ],
+    "name": "logExercise",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "rewards",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "exists",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+];
+const contractAddress = "0xe55C26C10035D58C510C0d694e7afD01DA9c9e02";
+const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+
+
+
+
+
+
+
 
 
 
@@ -29,9 +326,9 @@ const Milestones = () => {
 
   // Update the milestones when the component mounts
   useEffect(() => {
-    // Here you can connect to your Solidity contract to retrieve the user's completed milestones
-    // and update the 'completed' property of each milestone accordingly
-    // For now, let's assume milestones 1, 3, 5, and 7 have been completed
+    const contract = new ethers.Contract(contractAddress, contractABI, provider);
+    //const rewardTuple = contract.getRewards();
+    //console.log(rewardTuple);
     setMilestones((prevMilestones) => {
       return prevMilestones.map((milestone) => {
         if ([1].includes(milestone.id)) {
@@ -80,15 +377,12 @@ async function handleCreateNewAccount(event) {
 }
 
 
-// Function to connect to wallet to retrieve users miles run
-async function fetchMilesRun() {
-  const provider = new ethers.providers.Web3Provider(ethereum);
+async function getContract() {
   const contract = new ethers.Contract(contractAddress, contractABI, provider);
-  const milesRun = await contract.getMilesRun();
-  console.log(milesRun)
-  return milesRun;
-  
+  return contract;
 }
+
+
 
 // Login component
 function Login({ onLogin, onConnect }) {
@@ -108,11 +402,6 @@ function Login({ onLogin, onConnect }) {
     onLogin();
   }
 
-
-
-  
-
-  
   return (
     
       <form className="login-form" onSubmit={handleSubmit}>
@@ -137,17 +426,23 @@ function Header() {
 
 // Dashboard component
 function Dashboard({ walletAddress, onLogout }) {
-  const [milesRun, setMilesRun, timeRan] = useState("");
+  const [milesRun, setMilesRun] = useState("");
+  const [timeRan, setTimeRan] = useState("");
+  const [RUNBalance, setRUNBalance] = useState("");
+
   console.log('Dashboard...')
+  
+  
 
   // Fetches the users miles from the contract when dashboard displays
   useEffect(() => {
     (async () => {
-      //const miles = await fetchMilesRun();
-      //console.log(miles)
-      // Assign fetched milesRun value to the milesRun state variable
-      //setMilesRun(miles.toString());
-      //console.log(miles.toString())
+      const contract = new ethers.Contract(contractAddress, contractABI, provider);
+      const timeTuple = await contract.getTotalTimeSpent();
+      setTimeRan(timeTuple[0] + " hrs, " + timeTuple[1] + " mins");
+      setMilesRun(await contract.getMilesRun());
+      const RUNBalance = await contract.getBalance();
+      setRUNBalance(RUNBalance.toString());
     })();
   }, []);
 
@@ -158,7 +453,7 @@ function Dashboard({ walletAddress, onLogout }) {
       <p>Welcome, {walletAddress}</p>
       <p>Total Time Spent Running: {timeRan}</p>
       <p>Total Miles Run: {milesRun}</p>
-      <p>Total RUN Balance: </p>
+      <p>Total RUN Balance: {RUNBalance}</p>
       <button className="logout-button" onClick={onLogout}>Logout</button>
     </div>
   );
@@ -250,6 +545,7 @@ function WorkoutInformation() {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [miles, setMiles] = useState(0);
 
   function handleHoursChange(event) {
     setHours(event.target.value);
@@ -263,6 +559,10 @@ function WorkoutInformation() {
     setSeconds(event.target.value);
   }
 
+  function handleMilesChange(event) {
+    setMiles(event.target.value);
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     // handle submission logic here
@@ -273,27 +573,39 @@ function WorkoutInformation() {
       
       <h2><br></br>Enter Run Information</h2>
       <form onSubmit={handleSubmit}>
+      
+      <div className="miles-box">
+          <label>
+            Miles:
+            <input type="number" value={miles} onChange={handleMilesChange} />
+          </label>
+        </div>
+
         <div className="hours-box">
           <label>
             Hours:
             <input type="number" value={hours} onChange={handleHoursChange} />
           </label>
         </div>
+
         <div className="minutes-box">
           <label>
             Minutes:
             <input type="number" value={minutes} onChange={handleMinutesChange} />
           </label>
         </div>
+
         <div className="seconds-box">
           <label>
             Seconds:
             <input type="number" value={seconds} onChange={handleSecondsChange} />
           </label>
         </div>
+
         <div className="submit-button-container">
           <button type="submit">Submit</button>
         </div>
+
       </form>
     </div>
   );
@@ -352,13 +664,5 @@ function App() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
 
 export default App;

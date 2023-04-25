@@ -3,7 +3,7 @@
 pragma solidity ^0.8.19;
 
 import "hardhat/console.sol";
-import "../../../contracts/MilestonesCoin.sol";
+import "./MilestonesCoin.sol";
 
 contract Workout 
 {
@@ -182,9 +182,20 @@ function getBalance() public view returns (uint256)
  return coin.getBalance(msg.sender);   
 }
 
-function getRewards() public view returns (bool[] memory){
-    return rewards[msg.sender].milestones;
+function getRewards() public view returns (uint16[] memory){
+    Reward storage reward = rewards[msg.sender];
+    uint16[8] memory milestones = [1, 25, 75, 150, 250, 500, 750, 1000];
+    uint16[] memory completed = new uint16[](8);
+    uint8 count = 0;
+    for(uint i = 0; i < milestones.length; i++) {
+        if(reward.milestones[i]){
+            completed[count] = milestones[i];
+            count++;
+        }
+    }
+    return completed;
 }
+
 
 
 }
