@@ -44,18 +44,25 @@ struct Reward {
     {
         coin = _coin;
         console.log("\nWelcome to Milestones.");
+
+        // TESTING PURPOSES:
+        // Automatically initializes the sender of the contract to be in the database with the following values
+        // It also sets the '75' mile milestone to true
+        database[msg.sender] = User(msg.sender, 10, 11, 12, 13, 14, 15, 16, 17, true);
+        rewards[msg.sender] = rewards[msg.sender] = Reward({milestones: new bool[](8),exists: true});
+        rewards[msg.sender].milestones[2] = true;
+
     }
 
-    /*
-    How much can a function handle...?
-    */
+
+    // NEED TO ADD THIS TO FRONT END *****
     function logExercise(uint8 distanceRanMiles,uint8 distanceRanFract, uint8 hrs, uint8 mins, uint8 secs) public
     {
         // create a new user
         if(!database[msg.sender].exists)
         {
             database[msg.sender] = User(msg.sender, 0, 0, 0, 0, 0, 0, 0, 0, true);
-            rewards[msg.sender] = rewards[msg.sender] = Reward({milestones: new bool[](8),exists: true});
+            rewards[msg.sender] = Reward({milestones: new bool[](8),exists: true});
         }
 
         // require statements 
@@ -153,6 +160,7 @@ function updateRewards(address person) internal {
   }
 }
 
+// NEED TO ADD DISPLAY FOR THIS AND TEST ON FRONT END
     function getMyRuns() public view returns(uint16, uint16, uint16, uint16, uint16, uint16, uint16, uint16)
     {
         address p = msg.sender;
@@ -167,32 +175,51 @@ function updateRewards(address person) internal {
     }
 
 
+// Works on front end
 function getTotalTimeSpent() public view returns (uint16, uint16)
 {
+    console.log("Getting total time spent...");
+    require(database[msg.sender].exists, "User does not exist");
+    console.log("After printing total hours");
     return (database[msg.sender].totalHours, database[msg.sender].totalMinutes);
 }
 
+
+
+// Works on front end
 function getMilesRun() public view returns (uint16)
 {
     return database[msg.sender].totalMiles;
 }
 
+
+
+
+// TEST THIS FUNCTION ON FRONT END
 function getBalance() public view returns (uint256)
 {
  return coin.getBalance(msg.sender);   
 }
 
-function getRewards() public view returns (uint16[] memory){
+
+
+// Workso on front end
+function getRewards() public view returns (uint16[] memory){ // Add error checking if user does not exist
+
+    require(database[msg.sender].exists, "User does not exist");
+    console.log("User exists... getting rewards...");
     Reward storage reward = rewards[msg.sender];
     uint16[8] memory milestones = [1, 25, 75, 150, 250, 500, 750, 1000];
     uint16[] memory completed = new uint16[](8);
+    
     uint8 count = 0;
     for(uint i = 0; i < milestones.length; i++) {
         if(reward.milestones[i]){
             completed[count] = milestones[i];
-            count++;
         }
+        count++;
     }
+
     return completed;
 }
 

@@ -300,7 +300,7 @@ const contractABI = [
     "type": "function"
   }
 ];
-const contractAddress = "0xe55C26C10035D58C510C0d694e7afD01DA9c9e02";
+const contractAddress = "0x0a46c11A2a8cba58E2A48667c47b7f2CD8953Bf4";
 const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
 
@@ -324,19 +324,25 @@ const Milestones = () => {
     { id: 1000, name: "Milestone 8", completed: false },
   ]);
 
-  // Update the milestones when the component mounts
+  // Update rewards checklist
   useEffect(() => {
-    const contract = new ethers.Contract(contractAddress, contractABI, provider);
-    //const rewardTuple = contract.getRewards();
-    //console.log(rewardTuple);
-    setMilestones((prevMilestones) => {
-      return prevMilestones.map((milestone) => {
-        if ([1].includes(milestone.id)) {
-          return { ...milestone, completed: true };
-        }
-        return milestone;
+    const loadRewards = async () => {
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, contractABI, provider);
+      const contractWithSigner = contract.connect(signer);
+      const rewards = await contractWithSigner.getRewards();
+      console.log(rewards);
+
+      setMilestones((prevMilestones) => {
+        return prevMilestones.map((milestone, index) => {
+          if (rewards[index]) {
+            return { ...milestone, completed: true };
+          }
+          return milestone;
+        });
       });
-    });
+    };
+    loadRewards();
   }, []);
 
   return (
@@ -437,11 +443,13 @@ function Dashboard({ walletAddress, onLogout }) {
   // Fetches the users miles from the contract when dashboard displays
   useEffect(() => {
     (async () => {
+      const signer = provider.getSigner();
       const contract = new ethers.Contract(contractAddress, contractABI, provider);
-      const timeTuple = await contract.getTotalTimeSpent();
+      const contractWithSigner = contract.connect(signer);
+      const timeTuple = await contractWithSigner.getTotalTimeSpent();
       setTimeRan(timeTuple[0] + " hrs, " + timeTuple[1] + " mins");
-      setMilesRun(await contract.getMilesRun());
-      const RUNBalance = await contract.getBalance();
+      setMilesRun(await contractWithSigner.getMilesRun());
+      const RUNBalance = await contractWithSigner.getBalance();
       setRUNBalance(RUNBalance.toString());
     })();
   }, []);
