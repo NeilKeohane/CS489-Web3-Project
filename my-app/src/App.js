@@ -367,20 +367,7 @@ const Milestones = () => {
 
 
 
-// Function to create new account (not used)
-async function handleCreateNewAccount(event) {
-  const [newAccountId, setNewAccountId] = useState("");
-  event.preventDefault();
-  const contract = new ethers.Contract(contractAddress, contractABI, provider);
 
-  try {
-    const newAccount = await contract.createNew(newAccountId);
-    console.log("New account created:", newAccount);
-    // Do something with the new account, such as updating the UI
-  } catch (error) {
-    console.error(error);
-  }
-}
 
 
 async function getContract() {
@@ -619,6 +606,76 @@ function WorkoutInformation() {
   );
 }
 
+const Item = {
+  name: 'Water Bottle',
+  price: 10.00,
+  image: 'https://www.transparentpng.com/thumb/water-bottle/8H6QEi-water-bottle-transparent-image.png', 
+};
+const Item2 = {
+  name: 'Treadmill',
+  price: 100.00,
+  image: 'https://www.lifefitnessemea.com/resource/blob/952594/ca401fbe964976dcff41c140860f0e83/f1-smart-treadmill-1000x1000-transparent-data.png', 
+};
+
+const Marketplace = () => {
+  const [selectedItem1, setSelectedItem1] = useState(null);
+  const [selectedItem2, setSelectedItem2] = useState(null);
+  const [balance, setBalance] = useState(500.00);
+  
+  const handleItemClick1 = () => {
+    setSelectedItem1(selectedItem1 === Item ? null : Item);
+  };
+  
+  const handleItemClick2 = () => {
+    setSelectedItem2(selectedItem2 === Item2 ? null : Item2);
+  };
+  
+  const handleWithdraw = () => {
+    let totalWithdrawal = 0;
+    if (selectedItem1) {
+      totalWithdrawal += selectedItem1.price;
+      setSelectedItem1(null);
+    }
+    if (selectedItem2) {
+      totalWithdrawal += selectedItem2.price;
+      setSelectedItem2(null);
+    }
+    setBalance(balance - totalWithdrawal);
+  };
+    
+
+  return (
+    <div className='marketplace_box'>
+      <h1 style={{textAlign: 'center'}}>Reward Shop</h1>
+      <div style={{display: 'flex'}}>
+
+        <div className="items" style={{border: selectedItem1 === Item ? '2px solid green' : 'none', textAlign: 'center'}} onClick={handleItemClick1}>
+          <img src={Item.image} alt={Item.name} width="150" height="100" />
+          <h2>{Item.name}</h2>
+          <p>${Item.price}</p>
+        </div>
+        
+        <div className="items2" style={{border: selectedItem2 === Item2 ? '2px solid green' : 'none', textAlign: 'center'}} onClick={handleItemClick2}>
+          <img src={Item2.image} alt={Item2.name} width="150" height="100" />
+          <h2>{Item2.name}</h2>
+          <p>${Item2.price}</p>
+        </div>
+
+      </div>
+
+      <div className="balance" style={{textAlign: 'center'}}>
+        <p>Balance: ${balance.toFixed(2)}</p>
+      </div>
+
+      <div className="withdraw" style={{textAlign: 'center'}}>
+        <button onClick={handleWithdraw} disabled={!selectedItem1 && !selectedItem2} type='submit'>Withdraw</button>
+      </div>
+    </div>
+  );
+};
+
+
+
 
 // Main App component
 function App() {
@@ -660,6 +717,9 @@ function App() {
             </div>
             <div class="dashboard-box">
               <Milestones />
+            </div>
+            <div class="dashboard-box">
+            <Marketplace />
             </div>
           </div>
 

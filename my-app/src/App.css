@@ -16,7 +16,7 @@ body {
   height: 100vh;
 }
 
-.login-form, .goal-form {
+.login-form, .goal-form{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -240,4 +240,28 @@ body {
     /* Add other styles as necessary */
   }
   
+  .marketplace_box {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    padding: 20px;
+    background-image: url("https://cdnb.artstation.com/p/marketplace/presentation_assets/001/497/605/large/file.jpg?1643095919");
+  }
+  .withdraw button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 25px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
   
+  .withdraw button:hover {
+    background-color: #3e8e41;
+  }
