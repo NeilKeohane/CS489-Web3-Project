@@ -15,8 +15,8 @@ contract MilestonesCoin {
     }
 
     function transfer(address _to, uint256 _value) external returns (bool success) {
-        require(balanceOf[msg.sender] >= _value, "Insufficient balance");
-        balanceOf[msg.sender] -= _value;
+        require(balanceOf[address(this)] >= _value, "Insufficient balance");
+        balanceOf[address(this)] -= _value;
         balanceOf[_to] += _value;
         return true;
     }

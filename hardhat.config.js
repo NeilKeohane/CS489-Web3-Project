@@ -10,7 +10,8 @@ module.exports = {
     },
     ganache: {
       url: "http://127.0.0.1:8545",
-      chainId: 1337
+      chainId: 1337,
+      allowUnlimitedContractSize: true
     },
     goerli: {
       url: "https://eth-goerli.g.alchemy.com/v2/EetNVhdGjWQ5svv4-6hYSzWeXWyuAwEQ",

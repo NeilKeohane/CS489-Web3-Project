@@ -58,6 +58,7 @@ struct Reward {
     // NEED TO ADD THIS TO FRONT END *****
     function logExercise(uint8 distanceRanMiles,uint8 distanceRanFract, uint8 hrs, uint8 mins, uint8 secs) public
     {
+        console.log("Logging exercise...");
         // create a new user
         if(!database[msg.sender].exists)
         {
@@ -96,7 +97,7 @@ struct Reward {
 
     }
     
-    function rollovers(address person, uint16 distanceRanMiles, uint16 distanceRanFract) internal
+    function rollovers(address person, uint16 distanceRanMiles, uint16 distanceRanFract) public
     {
         /*
         Rollover time conversions
@@ -138,7 +139,7 @@ struct Reward {
         }
     }
 
-function updateRewards(address person) internal {
+function updateRewards(address person) public {
   Reward storage reward = rewards[person];
   uint256 totalMiles = database[person].totalMiles;
 
@@ -154,7 +155,7 @@ function updateRewards(address person) internal {
 
     if (totalMiles > milestone && !reward.milestones[i]) {
       reward.milestones[i] = true;
-      coin.transfer(person, milestones[i]);
+      //coin.transfer(person, milestones[i]);
       console.log("Congrats! you reached your", milestones[i], "mile milestone!");
     }
   }
@@ -179,9 +180,14 @@ function updateRewards(address person) internal {
 function getTotalTimeSpent() public view returns (uint16, uint16)
 {
     console.log("Getting total time spent...");
-    require(database[msg.sender].exists, "User does not exist");
+    require(database[msg.sender].exists, "Cannot get total time spent running, User does not exist");
     console.log("After printing total hours");
-    return (database[msg.sender].totalHours, database[msg.sender].totalMinutes);
+
+
+    return  (database[msg.sender].totalHours, database[msg.sender].totalMinutes);
+
+    
+    
 }
 
 

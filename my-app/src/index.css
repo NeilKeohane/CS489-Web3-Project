@@ -11,3 +11,34 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.workout-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.workout-input {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.workout-input label {
+  margin-right: 8px;
+}
+
+.workout-input input {
+  width: 64px;
+  margin-right: 8px;
+}
+
+.miles-unit {
+  margin-left: 8px;
+}
+
+.time-unit {
+  margin-left: 4px;
+  margin-right: 4px;
+}

@@ -300,9 +300,11 @@ const contractABI = [
     "type": "function"
   }
 ];
-const contractAddress = "0x0a46c11A2a8cba58E2A48667c47b7f2CD8953Bf4";
+const contractAddress = "0xB30f15F6594DC781b9980763a05b8b7dD3B92f77";
+const contractURL = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 
+//const contractURL = new ethers.providers.JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/EetNVhdGjWQ5svv4-6hYSzWeXWyuAwEQ");
 
 
 
@@ -327,8 +329,10 @@ const Milestones = () => {
   // Update rewards checklist
   useEffect(() => {
     const loadRewards = async () => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, contractABI, provider);
+      console.log(signer);
+      const contract = new ethers.Contract(contractAddress, contractABI, contractURL);
       const contractWithSigner = contract.connect(signer);
       const rewards = await contractWithSigner.getRewards();
       console.log(rewards);
@@ -354,7 +358,7 @@ const Milestones = () => {
             key={milestone.id}
             className={`Milestones-box ${milestone.completed ? "completed" : ""}`}
           >
-            {milestone.completed ? <span>&#10003;</span> : milestone.id}
+            {milestone.completed ? <span className="milestone-text">&#10003;</span> : milestone.id}
           </div>
         ))}
       </div>
@@ -371,7 +375,7 @@ const Milestones = () => {
 
 
 async function getContract() {
-  const contract = new ethers.Contract(contractAddress, contractABI, provider);
+  const contract = new ethers.Contract(contractAddress, contractABI, contractURL);
   return contract;
 }
 
@@ -430,9 +434,11 @@ function Dashboard({ walletAddress, onLogout }) {
   // Fetches the users miles from the contract when dashboard displays
   useEffect(() => {
     (async () => {
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const contract = new ethers.Contract(contractAddress, contractABI, provider);
+      const contract = new ethers.Contract(contractAddress, contractABI, contractURL);
       const contractWithSigner = contract.connect(signer);
+      console.log(signer);
       const timeTuple = await contractWithSigner.getTotalTimeSpent();
       setTimeRan(timeTuple[0] + " hrs, " + timeTuple[1] + " mins");
       setMilesRun(await contractWithSigner.getMilesRun());
@@ -510,7 +516,7 @@ function LoginWallet({ onConnect}) {
         alert("No accounts found. Please connect a wallet with an account.");
         return;
       }
-    
+      console.log("Before signer in connectWallet...")
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       setConnected(true);
@@ -535,8 +541,29 @@ function LoginWallet({ onConnect}) {
 
 
 
+
 // Workout Information Component
 function WorkoutInformation() {
+
+  async function logExercise() {
+    console.log("Logging exercise...");
+
+    const distMiles = document.getElementById('distanceMiles').value;
+    const distFract = document.getElementById('distanceFract').value;
+    const hours = document.getElementById('hrs').value;
+    const mins = document.getElementById('mins').value;
+    const secs = document.getElementById('secs').value;
+    console.log(distMiles);
+    
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, contractABI, contractURL);
+    const contractWithSigner = contract.connect(signer);
+    console.log("Before logging...")
+    await contractWithSigner.logExercise(distMiles, distFract, hours, mins, secs);
+    console.log("Done logging...");
+  }
+  
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
@@ -559,10 +586,58 @@ function WorkoutInformation() {
   }
 
   function handleSubmit(event) {
+    console.log("Called submit...")
     event.preventDefault();
-    // handle submission logic here
+    logExercise();
+    console.log("Called log exercise")
   }
 
+ 
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      <form>
+        <label style={{ display: "flex", alignItems: "center" }}>
+          Distance (miles):{" "}
+          <input type="number" min="0" id="distanceMiles" />
+          <span style={{ marginLeft: "5px" }}>.</span>
+          <input type="number" min="0" id="distanceFract" />
+          <span style={{ marginLeft: "5px" }}></span>
+        </label>
+        <br />
+        <br />
+        <label style={{ display: "flex", alignItems: "center" }}>
+          Hours:{" "}
+          <input type="number" min="0" id="hrs" />
+          <span style={{ marginLeft: "5px" }}>Minutes:</span>
+          <input type="number" min="0" id="mins" />
+          <span style={{ marginLeft: "5px" }}>Seconds:</span>
+          <input type="number" min="0" id="secs" />
+          <span style={{ marginLeft: "5px" }}></span>
+        </label>
+        <br />
+        <br />
+        <input
+          value="Submit Exercise"
+          className="submit-button"
+          type="button"
+          onClick={logExercise}
+   
+        />
+      </form>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
+  /*
   return (
     <div className="workout-information">
       
@@ -572,28 +647,28 @@ function WorkoutInformation() {
       <div className="miles-box">
           <label>
             Miles:
-            <input type="number" value={miles} onChange={handleMilesChange} />
+            <input type="number" name="distanceMiles" value={miles} />
           </label>
         </div>
 
         <div className="hours-box">
           <label>
             Hours:
-            <input type="number" value={hours} onChange={handleHoursChange} />
+            <input type="number" name="hrs" value={hours}  />
           </label>
         </div>
 
         <div className="minutes-box">
           <label>
             Minutes:
-            <input type="number" value={minutes} onChange={handleMinutesChange} />
+            <input type="number" name="mins" value={minutes} />
           </label>
         </div>
 
         <div className="seconds-box">
           <label>
             Seconds:
-            <input type="number" value={seconds} onChange={handleSecondsChange} />
+            <input type="number" name="secs" value={seconds} />
           </label>
         </div>
 
@@ -605,7 +680,7 @@ function WorkoutInformation() {
     </div>
   );
 }
-
+*/
 const Item = {
   name: 'Water Bottle',
   price: 10.00,
@@ -652,19 +727,19 @@ const Marketplace = () => {
         <div className="items" style={{border: selectedItem1 === Item ? '2px solid green' : 'none', textAlign: 'center'}} onClick={handleItemClick1}>
           <img src={Item.image} alt={Item.name} width="150" height="100" />
           <h2>{Item.name}</h2>
-          <p>${Item.price}</p>
+          <p>{Item.price} RUN</p>
         </div>
         
         <div className="items2" style={{border: selectedItem2 === Item2 ? '2px solid green' : 'none', textAlign: 'center'}} onClick={handleItemClick2}>
           <img src={Item2.image} alt={Item2.name} width="150" height="100" />
           <h2>{Item2.name}</h2>
-          <p>${Item2.price}</p>
+          <p>{Item2.price} RUN</p>
         </div>
 
       </div>
 
       <div className="balance" style={{textAlign: 'center'}}>
-        <p>Balance: ${balance.toFixed(2)}</p>
+        
       </div>
 
       <div className="withdraw" style={{textAlign: 'center'}}>
