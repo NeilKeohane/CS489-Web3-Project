@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { ethers } from "ethers";
+
 import { TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS } from 'hardhat/builtin-tasks/task-names';
 
 // Logos for the header
 import logo from './running-man-silhouette-19.webp';
-import logo2 from './finish-line.webp'
+import logo2 from './finish-line.webp';
+import refresh from './refresh_icon.webp';
 
 // Smart Contract Information
 
@@ -300,10 +302,12 @@ const contractABI = [
     "type": "function"
   }
 ];
-const contractAddress = "0xB30f15F6594DC781b9980763a05b8b7dD3B92f77";
-const contractURL = new ethers.providers.JsonRpcProvider("http://localhost:8545");
-const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+const contractAddress = "0x8937FCea2Cb46E5ab782684080Eb787DF8Edc243";
 
+//const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
+
+
+const contractURL = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 //const contractURL = new ethers.providers.JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/EetNVhdGjWQ5svv4-6hYSzWeXWyuAwEQ");
 
 
@@ -428,6 +432,21 @@ function Dashboard({ walletAddress, onLogout }) {
   const [RUNBalance, setRUNBalance] = useState("");
 
   console.log('Dashboard...')
+
+    // Function to reload the dashboard data when refresh button is clicked
+    const handleRefresh = () => {
+      (async () => {
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, contractABI, contractURL);
+        const contractWithSigner = contract.connect(signer);
+        const timeTuple = await contractWithSigner.getTotalTimeSpent();
+        setTimeRan(timeTuple[0] + " hrs, " + timeTuple[1] + " mins");
+        setMilesRun(await contractWithSigner.getMilesRun());
+        const RUNBalance = await contractWithSigner.getBalance();
+        setRUNBalance(RUNBalance.toString());
+      })();
+    };
   
   
 
@@ -449,8 +468,13 @@ function Dashboard({ walletAddress, onLogout }) {
 
 
   return (
+    
     <div className="dashboard">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Z/gnkO7l0zmF52bW8ULvOWh9GFG+s/m2Q0heLzZVupbZNT74iG+C5j1nM+1IvF9MVDx7p/G39jKwY7YUvEK6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <h1>Dashboard</h1>
+      <button className="refresh-button" onClick={handleRefresh}>
+      <img src={refresh} alt="refresh" width="20" height="20"  />
+        </button>
       <p>Welcome, {walletAddress}</p>
       <p>Total Time Spent Running: {timeRan}</p>
       <p>Total Miles Run: {milesRun}</p>
