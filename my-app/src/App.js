@@ -4,13 +4,12 @@ import { ethers } from "ethers";
 
 import { TASK_COMPILE_SOLIDITY_GET_SOURCE_PATHS } from 'hardhat/builtin-tasks/task-names';
 
-// Logos for the header
+// Logos for the header / refresh icon
 import logo from './running-man-silhouette-19.webp';
 import logo2 from './finish-line.webp';
 import refresh from './refresh_icon.webp';
 
 // Smart Contract Information
-
 const contractABI = [
   {
     "inputs": [
@@ -302,20 +301,9 @@ const contractABI = [
     "type": "function"
   }
 ];
-const contractAddress = "0x8937FCea2Cb46E5ab782684080Eb787DF8Edc243";
-
-//const provider = new ethers.providers.JsonRpcProvider("http://localhost:8545");
-
-
+const contractAddress = "0xAEaBD2E8AAfb02b76eb49486dC917CbE39777226";
 const contractURL = new ethers.providers.JsonRpcProvider("http://localhost:8545");
 //const contractURL = new ethers.providers.JsonRpcProvider("https://eth-goerli.g.alchemy.com/v2/EetNVhdGjWQ5svv4-6hYSzWeXWyuAwEQ");
-
-
-
-
-
-
-
 
 
 const Milestones = () => {
@@ -330,33 +318,40 @@ const Milestones = () => {
     { id: 1000, name: "Milestone 8", completed: false },
   ]);
 
+
+  const loadRewards = async () => {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    console.log(signer);
+    const contract = new ethers.Contract(contractAddress, contractABI, contractURL);
+    const contractWithSigner = contract.connect(signer);
+    const rewards = await contractWithSigner.getRewards();
+    console.log(rewards);
+
+    setMilestones((prevMilestones) => {
+      return prevMilestones.map((milestone, index) => {
+        if (rewards[index]) {
+          return { ...milestone, completed: true };
+        }
+        return milestone;
+      });
+    });
+  };
+
   // Update rewards checklist
   useEffect(() => {
-    const loadRewards = async () => {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const signer = provider.getSigner();
-      console.log(signer);
-      const contract = new ethers.Contract(contractAddress, contractABI, contractURL);
-      const contractWithSigner = contract.connect(signer);
-      const rewards = await contractWithSigner.getRewards();
-      console.log(rewards);
-
-      setMilestones((prevMilestones) => {
-        return prevMilestones.map((milestone, index) => {
-          if (rewards[index]) {
-            return { ...milestone, completed: true };
-          }
-          return milestone;
-        });
-      });
-    };
     loadRewards();
   }, []);
+
+  const handleRefresh = () => {
+    loadRewards();
+  };
 
   return (
     <div className="milestones-box">
       <h2>Milestones Completed</h2>
       <div>
+        <button onClick={handleRefresh}><img src={refresh} alt="refresh" width="20" height="20"  /></button>
         {milestones.map((milestone) => (
           <div
             key={milestone.id}
@@ -369,6 +364,7 @@ const Milestones = () => {
     </div>
   );
 };
+
 
 
 
@@ -445,6 +441,7 @@ function Dashboard({ walletAddress, onLogout }) {
         setMilesRun(await contractWithSigner.getMilesRun());
         const RUNBalance = await contractWithSigner.getBalance();
         setRUNBalance(RUNBalance.toString());
+        Milestones();
       })();
     };
   
@@ -470,7 +467,6 @@ function Dashboard({ walletAddress, onLogout }) {
   return (
     
     <div className="dashboard">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-Z/gnkO7l0zmF52bW8ULvOWh9GFG+s/m2Q0heLzZVupbZNT74iG+C5j1nM+1IvF9MVDx7p/G39jKwY7YUvEK6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
       <h1>Dashboard</h1>
       <button className="refresh-button" onClick={handleRefresh}>
       <img src={refresh} alt="refresh" width="20" height="20"  />
@@ -562,10 +558,6 @@ function LoginWallet({ onConnect}) {
   );
 }
 
-
-
-
-
 // Workout Information Component
 function WorkoutInformation() {
 
@@ -578,6 +570,11 @@ function WorkoutInformation() {
     const mins = document.getElementById('mins').value;
     const secs = document.getElementById('secs').value;
     console.log(distMiles);
+    document.getElementById("distanceMiles").value = "";
+    document.getElementById("distanceFract").value = "";
+    document.getElementById("hrs").value = "";
+    document.getElementById("mins").value = "";
+    document.getElementById("secs").value = "";
     
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
@@ -613,6 +610,11 @@ function WorkoutInformation() {
     console.log("Called submit...")
     event.preventDefault();
     logExercise();
+    document.getElementById("distanceMiles").value = "";
+    document.getElementById("distanceFract").value = "";
+    document.getElementById("hrs").value = "";
+    document.getElementById("mins").value = "";
+    document.getElementById("secs").value = "";
     console.log("Called log exercise")
   }
 
@@ -654,57 +656,6 @@ function WorkoutInformation() {
 }
 
 
-
-
-
-
-
-
-
-  /*
-  return (
-    <div className="workout-information">
-      
-      <h2><br></br>Enter Run Information</h2>
-      <form onSubmit={handleSubmit}>
-      
-      <div className="miles-box">
-          <label>
-            Miles:
-            <input type="number" name="distanceMiles" value={miles} />
-          </label>
-        </div>
-
-        <div className="hours-box">
-          <label>
-            Hours:
-            <input type="number" name="hrs" value={hours}  />
-          </label>
-        </div>
-
-        <div className="minutes-box">
-          <label>
-            Minutes:
-            <input type="number" name="mins" value={minutes} />
-          </label>
-        </div>
-
-        <div className="seconds-box">
-          <label>
-            Seconds:
-            <input type="number" name="secs" value={seconds} />
-          </label>
-        </div>
-
-        <div className="submit-button-container">
-          <button type="submit">Submit</button>
-        </div>
-
-      </form>
-    </div>
-  );
-}
-*/
 const Item = {
   name: 'Workout Plan 1',
   price: 10.00,
@@ -774,8 +725,6 @@ const Marketplace = () => {
     </div>
   );
 };
-
-
 
 
 // Main App component

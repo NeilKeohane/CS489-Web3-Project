@@ -12,7 +12,7 @@ const main = async () => {
 
     // Deploy main contract
     const mainContract = await hre.ethers.getContractFactory("Workout");
-    const contract = await mainContract.deploy(coin.address); // Pass in coin contract address for Workout contract constructor
+    const contract = await mainContract.deploy(coin.address); 
     await contract.deployed();
     console.log("Workout contract deployed to:", contract.address);
     const abi = contract.interface.abi;
@@ -31,3 +31,6 @@ const main = async () => {
   };
   
   runMain();
+
+
+  

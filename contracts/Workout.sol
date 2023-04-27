@@ -45,17 +45,13 @@ struct Reward {
         coin = _coin;
         console.log("\nWelcome to Milestones.");
 
-        // TESTING PURPOSES:
-        // Automatically initializes the sender of the contract to be in the database with the following values
-        // It also sets the '75' mile milestone to true
+        // TESTING:
         database[msg.sender] = User(msg.sender, 10, 11, 12, 13, 14, 15, 16, 17, true);
         rewards[msg.sender] = rewards[msg.sender] = Reward({milestones: new bool[](8),exists: true});
         rewards[msg.sender].milestones[2] = true;
 
     }
 
-
-    // NEED TO ADD THIS TO FRONT END *****
     function logExercise(uint8 distanceRanMiles,uint8 distanceRanFract, uint8 hrs, uint8 mins, uint8 secs) public
     {
         console.log("Logging exercise...");
@@ -155,13 +151,12 @@ function updateRewards(address person) public {
 
     if (totalMiles > milestone && !reward.milestones[i]) {
       reward.milestones[i] = true;
-      //coin.transfer(person, milestones[i]);
+      coin.transfer(person, milestones[i]);
       console.log("Congrats! you reached your", milestones[i], "mile milestone!");
     }
   }
 }
 
-// NEED TO ADD DISPLAY FOR THIS AND TEST ON FRONT END
     function getMyRuns() public view returns(uint16, uint16, uint16, uint16, uint16, uint16, uint16, uint16)
     {
         address p = msg.sender;
@@ -176,7 +171,6 @@ function updateRewards(address person) public {
     }
 
 
-// Works on front end
 function getTotalTimeSpent() public view returns (uint16, uint16)
 {
     console.log("Getting total time spent...");
@@ -192,24 +186,16 @@ function getTotalTimeSpent() public view returns (uint16, uint16)
 
 
 
-// Works on front end
 function getMilesRun() public view returns (uint16)
 {
     return database[msg.sender].totalMiles;
 }
 
-
-
-
-// TEST THIS FUNCTION ON FRONT END
 function getBalance() public view returns (uint256)
 {
  return coin.getBalance(msg.sender);   
 }
 
-
-
-// Workso on front end
 function getRewards() public view returns (uint16[] memory){ // Add error checking if user does not exist
 
     require(database[msg.sender].exists, "User does not exist");
@@ -228,7 +214,5 @@ function getRewards() public view returns (uint16[] memory){ // Add error checki
 
     return completed;
 }
-
-
 
 }

@@ -1,21 +1,21 @@
 // SPDX-License-Identifier: MIT
-
+import "hardhat/console.sol";
 pragma solidity ^0.8.19;
 
 contract MilestonesCoin {
     string public name = "Milestones Coin";
     string public symbol = "RUN";
-    uint8 public decimals = 18;
-    uint256 public totalSupply = 1000000 * 10 ** decimals;
+    uint8 public decimals = 0;
+    uint256 public totalSupply = 1000000 * 10;
 
     mapping (address => uint256) public balanceOf;
 
     constructor() {
-        //balanceOf[msg.sender] = totalSupply;
+        balanceOf[address(this)] = totalSupply;
     }
 
     function transfer(address _to, uint256 _value) external returns (bool success) {
-        require(balanceOf[address(this)] >= _value, "Insufficient balance");
+        require(balanceOf[address(this)] >= _value, "Cannot transfer coin: Insufficient balance");
         balanceOf[address(this)] -= _value;
         balanceOf[_to] += _value;
         return true;
@@ -25,3 +25,11 @@ contract MilestonesCoin {
         return balanceOf[_userAddress];
     }
 }
+
+
+
+
+
+
+
+
