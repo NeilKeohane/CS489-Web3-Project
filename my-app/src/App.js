@@ -706,15 +706,16 @@ function WorkoutInformation() {
 }
 */
 const Item = {
-  name: 'Water Bottle',
+  name: 'Workout Plan 1',
   price: 10.00,
-  image: 'https://www.transparentpng.com/thumb/water-bottle/8H6QEi-water-bottle-transparent-image.png', 
+  image: 'https://www.adobe.com/express/create/planner/media_15ea3e715d22c0ab9717ab787cd0d29ac508133a4.jpeg?width=400&format=jpeg&optimize=medium', 
 };
 const Item2 = {
-  name: 'Treadmill',
+  name: 'Workout Plan 2',
   price: 100.00,
-  image: 'https://www.lifefitnessemea.com/resource/blob/952594/ca401fbe964976dcff41c140860f0e83/f1-smart-treadmill-1000x1000-transparent-data.png', 
+  image: 'https://i.pinimg.com/originals/8d/46/85/8d468533a502494805a2fc053c6d6912.jpg', 
 };
+
 
 const Marketplace = () => {
   const [selectedItem1, setSelectedItem1] = useState(null);
@@ -748,8 +749,9 @@ const Marketplace = () => {
       <h1 style={{textAlign: 'center'}}>Reward Shop</h1>
       <div style={{display: 'flex'}}>
 
-        <div className="items" style={{border: selectedItem1 === Item ? '2px solid green' : 'none', textAlign: 'center'}} onClick={handleItemClick1}>
+        <div className="items" style={{border: selectedItem1 === Item ? '2px solid green' : 'none', textAlign: 'center', marginRight: '20px' }} onClick={handleItemClick1}>
           <img src={Item.image} alt={Item.name} width="150" height="100" />
+          
           <h2>{Item.name}</h2>
           <p>{Item.price} RUN</p>
         </div>
